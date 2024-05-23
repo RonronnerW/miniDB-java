@@ -1,10 +1,13 @@
 package com.wang.file;
 
+import com.wang.MiniDB;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 /**
  * 文件页类
+ * 文件页是操作系统和文件系统在内存中管理文件数据的单位，通常用于虚拟内存和文件缓存。
  */
 public class Page<T> {
     /**
@@ -39,7 +42,7 @@ public class Page<T> {
     /**
      * 文件管理器
      */
-    private FileManager fileMgr = new FileManager("miniDB_data");
+    private FileManager fileMgr = MiniDB.getFm();
 
 
     /**
@@ -78,14 +81,6 @@ public class Page<T> {
 
     public Page() {
     }
-
-    /**
-     * 页粒度的并发锁
-     * 假设有两个JDBC的客户端，每个客户端都运行着他们自己的线程，并且都尝试读不同的整数到一个相同的内存页中。
-     * 线程A先执行，它开始执行getInt()方法，但是在运行完该方法中的第一行后被打断了，也就是说，position已经被设置好了，但是还没开始真正读数据；
-     * 这个时候线程B紧接着执行，并且也执行了getInt()方法，直到这个方法执行完毕，这个时候的position会被指向线程B想指的地方；
-     * 现在线程A继续执行，可是position位置已经被B改变了，线程A却全然不知，因此线程A继续读出来的数据就会是错的
-     */
 
     public synchronized void read(Block blk) {
         fileMgr.read(blk, contents);
