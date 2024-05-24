@@ -12,7 +12,7 @@ public class FileTest {
 
         MiniDB.init();
         FileManager fm = MiniDB.getFm();
-        Block blk = new Block("junk", 0);
+        Block blk = new Block("test", 0);
 
         Page p1 = new Page();
         p1.read(blk);
@@ -22,7 +22,7 @@ public class FileTest {
 
         Page p2 = new Page();
         p2.setString(25, "hello");
-        blk = p2.append("junk");
+        blk = p2.append("test");
         Page p3 = new Page();
         p3.read(blk);
         String s = p3.getString(25);

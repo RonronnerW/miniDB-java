@@ -17,8 +17,8 @@ public class BasicBufferManager {
     public BasicBufferManager(int numBuffers) {
         this.numAvailable = numBuffers;
         bufferPool = new Buffer[numBuffers];
-        for (Buffer buffer : bufferPool) {
-            buffer = new Buffer();
+        for (int i = 0; i < numBuffers; i++) {
+            bufferPool[i] = new Buffer();
         }
     }
 
@@ -28,12 +28,11 @@ public class BasicBufferManager {
      *  @return 固定成功的缓冲区对象 或 null（表示需要等待）
      */
     public synchronized Buffer pin(Block blk) {
-        // 1. 缓冲区是否已经存在该块关联的页
         Buffer buffer = findExistingBuffer(blk);
+        // 1. 块中的内容不在缓存中
         if(buffer==null) {
-            // 不存在则找到一个缓冲页关联当前块
             buffer = chooseUnpinnedBuffer();
-            // 1.1 如果不存在没被固定的缓冲区，则返回null
+            // 1.1 缓冲池中所有的页都被固定了
             if (null == buffer)
                 return null;
             // 1.2 存在未固定的页就关联当前块

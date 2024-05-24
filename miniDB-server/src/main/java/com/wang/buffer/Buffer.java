@@ -19,6 +19,9 @@ public class Buffer {
     private int modifiedBy = -1;  // 当前缓冲区对应哪个事务
     private int logSequenceNum = -1;  // LSN
 
+    public Buffer() {
+    }
+
     /**
      * 一个客户端可以读取已固定的缓冲区中的具体内容，通过的是调用getInt()和getString()方法
      * @param offset

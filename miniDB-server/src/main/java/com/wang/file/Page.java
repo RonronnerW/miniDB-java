@@ -15,7 +15,7 @@ public class Page {
      * 一个块的字节数
      * 在商用的数据库系统中，这个值通常被设置为和OS块同样的大小，一个典型的值就是4K字节。
      */
-    public static final int BLOCK_SIZE = 400;
+    public static final int BLOCK_SIZE = FileConstant.BLOCK_SIZE;
 
     /**
      * int类型数据长度 4

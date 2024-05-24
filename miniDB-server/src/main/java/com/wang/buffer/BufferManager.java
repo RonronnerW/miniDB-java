@@ -7,7 +7,6 @@ import com.wang.file.Block;
  * 对缓冲管理器的包装-没有空闲缓冲区就加入等待队列
  */
 public class BufferManager {
-    private static final long TIME_OUT = 3000;
     private BasicBufferManager basicBufferManager;
 
     public BufferManager(BasicBufferManager basicBufferManager) {
@@ -20,7 +19,7 @@ public class BufferManager {
         while(null == buffer && !waitTooLong(startTime)) {
             // wait()，等待的对象是当前这个缓冲管理器，
             // 等待的目标是有一个未被固定的缓冲区
-            wait(TIME_OUT);
+            wait(BufferConstant.TIME_OUT);
             buffer = basicBufferManager.pin(blk);
         }
         if(null == buffer) {
@@ -45,7 +44,7 @@ public class BufferManager {
         while(null == buffer && !waitTooLong(startTime)) {
             // wait()，等待的对象是当前这个缓冲管理器，
             // 等待的目标是有一个未被固定的缓冲区
-            wait(TIME_OUT);
+            wait(BufferConstant.TIME_OUT);
             buffer = basicBufferManager.pinNew(fileName, pageFormatter);
         }
         if(null == buffer) {
@@ -64,6 +63,6 @@ public class BufferManager {
 
 
     private boolean waitTooLong(long startTime) {
-        return System.currentTimeMillis() - startTime > TIME_OUT;
+        return System.currentTimeMillis() - startTime > BufferConstant.TIME_OUT;
     }
 }
