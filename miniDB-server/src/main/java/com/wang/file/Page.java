@@ -7,9 +7,10 @@ import java.nio.charset.Charset;
 
 /**
  * 文件页类
- * 文件页是操作系统和文件系统在内存中管理文件数据的单位，通常用于虚拟内存和文件缓存。
+ * 文件页是操作系统和文件系统在内存中管理文件数据的单位，将磁盘块读入文件页进行操作。
+ * 一个 Page 维护一个 Block
  */
-public class Page<T> {
+public class Page {
     /**
      * 一个块的字节数
      * 在商用的数据库系统中，这个值通常被设置为和OS块同样的大小，一个典型的值就是4K字节。
@@ -19,15 +20,16 @@ public class Page<T> {
     /**
      * int类型数据长度 4
      */
-    public static final int INT_SIZE = Integer.SIZE / Byte.SIZE;
+    public static final int INT_SIZE = 4;
 
     /**
      * string类型数据长度
-     * 指示字符串长度的整数 + 各字符占的字节数
+     * 指示字符串长度的整数(4) + 各字符占的字节数
      * @param n
      * @return
      */
     public static final int STR_SIZE(int n) {
+        // 对应编码格式的字符占用字节
         float bytesPerChar = Charset.defaultCharset().newEncoder().maxBytesPerChar();
         // 指示字符串长度的整数 + 各字符占的字节数
         return INT_SIZE + n * ((int) bytesPerChar);
@@ -36,6 +38,8 @@ public class Page<T> {
     /**
      * 页中的内容
      * 一个ByteBuffer对象会跟踪缓冲区的当前位置指针，可以通过position()方法来改变它的位置
+     * ByteBuffer类包含2个工厂方法allocate()和allocateDirect()。
+     * 在我们的Page类实现中，使用的是allocateDirect()方法，它会告诉编译器使用OS I/O缓冲区中的其中一个来维持字节数组。
      */
     private ByteBuffer contents = ByteBuffer.allocateDirect(BLOCK_SIZE);
 

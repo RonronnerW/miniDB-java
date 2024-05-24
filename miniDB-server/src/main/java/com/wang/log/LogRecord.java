@@ -10,7 +10,13 @@ import static com.wang.file.Page.STR_SIZE;
  */
 public class LogRecord {
 
+    /**
+     * 日志页
+     */
     private Page logPage;
+    /**
+     * 日志记录的起始位置
+     */
     private int pos;
 
 

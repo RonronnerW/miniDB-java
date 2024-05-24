@@ -9,9 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 处理与OS的交互
+ * 处理与OS的交互，主要工作就是实现在Page类中定义的read(),write(),append()方法。
  * 文件管理器总是以一个块大小的字节序列为单位，从相应的文件进行读/写的，而且总是在一个块的边界开始操作。
- * 这样做时，文件管理器将确保每次读取、写入或追加调用都只需要一次磁盘访问。
  * 整个系统中 总是只有一个FileMgr对象会被创建
  */
 public class FileManager {
@@ -71,7 +70,7 @@ public class FileManager {
 
     private synchronized FileChannel getFile(String fileName) throws IOException {
         FileChannel fc = openFiles.get(fileName);
-        // 如果map中没打开过
+        // 如果map中不存在
         if (fc == null) {
             File dbTable = new File(dbDirectory, fileName);
             // 一个文件在被使用之前必须被打开，SimpleDB的文件管理器会创建一个RandomAccessFile对象，然后再获得该文件的文件通道
@@ -88,7 +87,7 @@ public class FileManager {
         try {
             buffer.clear();
             FileChannel fc = getFile(block.getFileName());
-            fc.read(buffer, block.getBlockNum() * buffer.capacity());
+            fc.read(buffer, block.getBlockNum() * buffer.capacity()); // position是开始位置 = 块号*块大小
         } catch (IOException e) {
             throw new RuntimeException("Cannot read block " + block);
         }
@@ -105,6 +104,12 @@ public class FileManager {
         }
     }
 
+    /**
+     * 先将position移动到文件的末尾去，然后将内存页中的内容追加到文件尾，返回的是一个新的块对象的引用
+     * @param filename
+     * @param buffer
+     * @return
+     */
     synchronized Block append(String filename, ByteBuffer buffer) {
         try {
             int newBlkNum = size(filename);
