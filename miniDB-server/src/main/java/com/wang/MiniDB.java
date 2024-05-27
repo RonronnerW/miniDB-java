@@ -2,6 +2,7 @@ package com.wang;
 
 import com.wang.buffer.BasicBufferManager;
 import com.wang.buffer.BufferConstant;
+import com.wang.buffer.BufferManager;
 import com.wang.file.FileConstant;
 import com.wang.file.FileManager;
 import com.wang.log.LogConstant;
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class MiniDB {
     private static FileManager fm;
     private static LogManager lm;
-    private static BasicBufferManager bm;
+    private static BufferManager bm;
 
     public static FileManager getFm() {
         return fm;
@@ -20,7 +21,7 @@ public class MiniDB {
     public static LogManager getLm() {
         return lm;
     }
-    public static BasicBufferManager getBm() {
+    public static BufferManager getBm() {
         return bm;
     }
 
@@ -41,7 +42,7 @@ public class MiniDB {
      * @param bufferPoolSize 缓冲池大小
      */
     private static void initBufferManager(int bufferPoolSize) {
-        bm = new BasicBufferManager(bufferPoolSize);
+        bm = new BufferManager(bufferPoolSize);
     }
 
     /**

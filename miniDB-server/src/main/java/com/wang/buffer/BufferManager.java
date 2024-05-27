@@ -9,8 +9,8 @@ import com.wang.file.Block;
 public class BufferManager {
     private BasicBufferManager basicBufferManager;
 
-    public BufferManager(BasicBufferManager basicBufferManager) {
-        this.basicBufferManager = basicBufferManager;
+    public BufferManager(int numBuffers) {
+        basicBufferManager = new BasicBufferManager(numBuffers);
     }
 
     public synchronized Buffer pin(Block blk) throws InterruptedException {

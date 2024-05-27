@@ -11,7 +11,7 @@ import static com.wang.log.LogManager.LAST_POS;
 /**
  * 构造器会将迭代器的初始位置指向日志文件最后一块的最后一条记录。next()方法使用相应的指针来往之前的日志记录不断迭代
  */
-public class LogIterator implements Iterator<LogRecord> {
+public class LogIterator implements Iterator<BasicLogRecord> {
 
     private Block blk;
     private Page page = new Page();
@@ -30,13 +30,13 @@ public class LogIterator implements Iterator<LogRecord> {
     }
 
     @Override
-    public LogRecord next() {
+    public BasicLogRecord next() {
         // 迭代上一块
         if (0 == currentRec)
             moveToNextBlock();
         // 继续往回迭代上一条
         currentRec = page.getInt(currentRec);
-        return new LogRecord(page, currentRec + INT_SIZE);
+        return new BasicLogRecord(page, currentRec + INT_SIZE);
     }
 
     @Override

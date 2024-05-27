@@ -103,7 +103,7 @@ public class LogManager {
      * iterator()方法返回的所有日志记录刚好是一个反的顺序，从最近的日志记录开始，不断往前移动
      * @return
      */
-    public Iterator<LogRecord> iterator() {
+    public Iterator<BasicLogRecord> iterator() {
         flush(); // 先持久化日志，确保日志都在磁盘上
         return new LogIterator(currentBlk);
     }

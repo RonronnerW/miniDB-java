@@ -5,6 +5,8 @@ import com.wang.file.Block;
 import com.wang.log.LogManager;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 public class BufferTest {
     @Test
     public void test() {
