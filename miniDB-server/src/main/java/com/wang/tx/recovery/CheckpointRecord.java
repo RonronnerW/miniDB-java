@@ -4,6 +4,10 @@ import com.wang.MiniDB;
 import com.wang.log.BasicLogRecord;
 import com.wang.log.LogManager;
 
+/**
+ * 静态检查点
+ * 静态检查点日志记录就是日志文件中的一个标记记录而已。恢复管理器不需要检查静态检查点日志记录之前的所有日志记录。
+ */
 public class CheckpointRecord implements LogRecord {
 
 

@@ -9,9 +9,9 @@ import java.util.HashMap;
 
 public class BufferTest {
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
         MiniDB.init();
-        BasicBufferManager bufferMgr = MiniDB.getBm();
+        BufferManager bufferMgr = MiniDB.getBm();
         Block blk = new Block("test", 1);
         Buffer buffer = bufferMgr.pin(blk);
         int n = buffer.getInt(20);

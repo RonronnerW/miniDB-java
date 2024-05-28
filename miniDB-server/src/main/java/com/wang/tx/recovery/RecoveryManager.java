@@ -41,9 +41,17 @@ public class RecoveryManager {
 
     /**
      * 回滚
+     * 事务T的回滚算法
+     * 1. 把最近的日志记录作为当前日志记录;
+     * 2. while(当前日志记录 != 事务T的开始日志记录){
+     *         if(当前日志记录 == 事务T的更新日志记录)
+     *             在指定位置写入修改前的old value;
+     *         else
+     *            当前日志记录 = 上一条日志记录;
+     *     }
+     * 3. 追加一条回滚日志记录到日志文件;
      */
     public void rollback() throws InterruptedException {
-        MiniDB.getBm().flushAll(txNum);
         doRollback();  // 把修改后的值，再改回来
         // 为什么rollback之后还要flushAll呢？
         // 这是因为，更新日志记录在undo过程中也会修改相应的缓冲区，因此需要flush到磁盘
@@ -78,7 +86,6 @@ public class RecoveryManager {
      * 恢复
      */
     public void recover() throws InterruptedException {
-        MiniDB.getBm().flushAll(txNum);
         doRecover();
         MiniDB.getBm().flushAll(txNum);
         int lsn = new CheckpointRecord().writeToLog();
@@ -87,8 +94,7 @@ public class RecoveryManager {
 
     /**
      * 恢复操作
-     * 该方法会遍历日志记录，无论何时它发现一个未完成事务的日志记录，
-     * 它都会调用该日志记录的undo()方法。
+     * 该方法会遍历日志记录，无论何时它发现一个未完成事务的日志记录，它都会调用该日志记录的undo()方法。
      * 当遇到一个CHECKPOINT日志记录或日志文件尾时（从后往前读，所以实际上是文件头），恢复算法停止。
      */
     private void doRecover() throws InterruptedException {
