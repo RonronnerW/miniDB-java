@@ -1,6 +1,7 @@
 # nimiDB
 
 /miniDB-server/miniDB/
+/miniDB/
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
